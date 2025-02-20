@@ -15,6 +15,7 @@ class _MainAppState extends State<MainApp> {
   List<String> taskList = [];
   TextEditingController textController = TextEditingController();
   String message = "Please enter a task";
+  bool showiest = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,6 +35,19 @@ class _MainAppState extends State<MainApp> {
 
                     child: TextField(
                       controller: textController,
+                      onSubmitted: (value) => {
+                        setState(() {
+                          if (textController.text.isEmpty) {
+                            message = "Please enter a task";
+                            showiest = true;
+                          } else {
+                            message = "";
+                            taskList.add(textController.text);
+                             showiest = false;
+                            textController.text = "";
+                          }
+                        })
+                      },
                       decoration: InputDecoration(
                         label: Text("Enter your task"),
                         border: OutlineInputBorder(
@@ -48,9 +62,11 @@ class _MainAppState extends State<MainApp> {
                     setState(() {
                       if (textController.text.isEmpty) {
                         message = "Please enter a task";
+                         showiest = true;
                       } else {
                         taskList.add(textController.text);
                         message = "";
+                         showiest = false;
                         textController.clear();
                       }
                     });
@@ -65,7 +81,11 @@ class _MainAppState extends State<MainApp> {
                 ),
               ],
             ),
-            Text(message, style: TextStyle(color: Colors.red)),
+            Visibility(
+              visible: showiest,
+              child: 
+            Text(message, style: TextStyle(color: Colors.red),)
+            ),
             Flexible(
               child: ListView.builder(
                 itemCount: taskList.length,
